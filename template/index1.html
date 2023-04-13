@@ -31,22 +31,50 @@ body, html {height: 100%}
     
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        google.charts.load("current", {packages:["corechart"]});
-        google.charts.setOnLoadCallback(drawChart);
+        
+        
+                   fetch("http://127.0.0.1:5000/")
+                    .then(response => response.json())
+                    .then(data => {
+                    
+                    const jsonData = JSON.parse(data);
+                    
+                    const chartData = [['Title', 'Salary']];
+                    for(let i=0;i < jsonData.length; i++ )
+                    {
+                        chartData.push([jsonData[i].Title, jsonData[i].Salary]);
+                    }
+                    
+                    
+                    const workbook = XLSX.utils.book_new();
+                    const worksheet = XLSX.utils.aoa_to_sheet(chartData);
+                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+                    XLSX.writeFile(workbook, 'data.xlsx');
+                    
+                    
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts,setOnLoadCallback(drawchart);
+        
+        
+//            fetch("http://127.0.0.1:5000/")
+//                .then(response => response.json())
+//                .then(data => {
+             
+//                 var dataTable = new google.visualization.DataTable();
+//                 dataTable.addColumn("string", "Title");
+//                 dataTable.addColumn("number", "Salary");
+
+//                 for (var i = 0; i < data.length; i++) {
+//                     var row = [data[i].Title, data[i].Salary];
+//                     dataTable.addRow(row);
+//                 }
+//         google.charts.load('current', {'packages':['corechart']});
+//                      google.charts,setOnLoadCallback(drawchart);
+       
 
         function drawChart() {
-            // Load the data from the Flask API
-            fetch("http://127.0.0.1:5000/").then(response => response.json()).then(data => {
-                // Convert the data to a Google Charts DataTable
-                var dataTable = new google.visualization.DataTable();
-                dataTable.addColumn("string", "Title");
-                dataTable.addColumn("number", "Salary");
-
-                for (var i = 0; i < data.length; i++) {
-                    var row = [data[i].Title, data[i].Salary];
-                    dataTable.addRow(row);
-                }
-
+           
+            
                 // Set chart options
                 var options = {
                     title: "Data Professionals Salary - 2022",
