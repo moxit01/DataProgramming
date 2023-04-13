@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>Data Professionals Salary - 2022</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+  background-image: url('https://i.postimg.cc/tTCXdqSp/modern-futuristic-sci-fi-background.jpg');
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+.chart {
+			border: 1px solid black;
+			border-radius: 5px;
+			padding: 10px;
+			border-width: 10px 5px 10px 5px;
+			border-style: solid;
+			border-color: black black blue black;
+			width: 500px;
+			height: 300px;
+			margin: 0 auto;
+            background: white;
+		}
+</style>
+</head>
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // Load the data from the Flask API
+            fetch("http://127.0.0.1:5000/").then(response => response.json()).then(data => {
+                // Convert the data to a Google Charts DataTable
+                var dataTable = new google.visualization.DataTable();
+                dataTable.addColumn("string", "Title");
+                dataTable.addColumn("number", "Salary");
+
+                for (var i = 0; i < data.length; i++) {
+                    var row = [data[i].Title, data[i].Salary];
+                    dataTable.addRow(row);
+                }
+
+                // Set chart options
+                var options = {
+                    title: "Data Professionals Salary - 2022",
+                    width: 800,
+                    height: 600,
+                    legend: { position: "none" }
+                };
+
+                // Create and draw the chart
+                var chart = new google.visualization.BarChart(document.getElementById("chart_div"));
+                chart.draw(dataTable, options);
+            });
+        }
+    </script>
+    
+<body>
+
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+  <div id="chart_div" class ="chart"></div>
+  <div class="w3-display-bottomleft w3-padding-large">
+  </div>
+</div>
+
+</body>
+</html>
